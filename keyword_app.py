@@ -29,7 +29,9 @@ def display_results():
                                           use_maxsum=use_maxsum,
                                           use_mmr=use_mmr)
     elif extractor_algo == 'RAKE':
-        st.markdown("blah blah Rake")
+        st.markdown("RAKE (Rapid Automatic Keyword Extraction) implementation inspired by the [original paper]("
+                    "https://www.researchgate.net/publication"
+                    "/227988510_Automatic_Keyword_Extraction_from_Individual_Documents)")
         extractor = Rake()
         keywords = extractor.extract_keywords(current_input)
         keywords = keywords[:10]
@@ -50,7 +52,7 @@ st.title('Automatic Keyword Extraction')
 
 st.markdown("<br>", unsafe_allow_html=True)
 """
-[![Star]()](https://github.com/lasmedina/key-smith)
+[![Star](https://raw.githubusercontent.com/lasmedina/key-smith/master/GitHub-Mark-Light-32px.png)](https://github.com/lasmedina/key-smith)
 """
 
 
