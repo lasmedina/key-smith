@@ -1,11 +1,14 @@
 # key-smith
-Streamlit app for keyword extraction
 
-This app uses [KeyBERT](https://github.com/MaartenGr/KeyBERT) to automatically score keywords and keyphrases from text.
+Simple, unsupervised, keyword extraction. 
 
-To run:
+Includes custom implementations of:
+
+- RAKE
+- TextRank
+- ...more coming soon
+
+To test the keyword extraction methods, run
 `streamlit run keyword_app.py`
 
-or 
-
-`streamlit run https://github.com/lasmedina/keywordApp/blob/master/keyword_app.py`
+The app also makes available [KeyBERT](https://github.com/MaartenGr/KeyBERT), a keyword scoring method based on BERT.
