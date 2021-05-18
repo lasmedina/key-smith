@@ -15,6 +15,11 @@ class TextRankTestCase(unittest.TestCase):
 
         textrank = TextRank()
         actual_keywords = textrank.extract_keywords(text)
-        expected_keywords = {('linear', 'diophantine', 'equations'): 0.12909098715935866, ('minimal', 'generating', 'sets'): 0.12328705522540664, ('minimal', 'set'): 0.11282312634758349, ('linear', 'constraints'): 0.08726551819217813, ('nonstrict', 'inequations'): 0.07979547401305309, ('strict', 'inequations'): 0.0793495898728744}
+        expected_keywords = [('linear diophantine equations', 0.12909098715935866),
+                             ('minimal generating sets', 0.12328705522540664),
+                             ('minimal set', 0.11282312634758349),
+                             ('linear constraints', 0.08726551819217813),
+                             ('nonstrict inequations', 0.07979547401305309),
+                             ('strict inequations', 0.0793495898728744)]
 
-        self.assertDictEqual(actual_keywords, expected_keywords)
+        self.assertListEqual(actual_keywords, expected_keywords)

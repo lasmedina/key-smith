@@ -3,6 +3,7 @@ import pandas as pd
 from keybert import KeyBERT
 
 from extractors.rake import Rake
+from extractors.textrank import TextRank
 
 
 def display_results():
@@ -35,7 +36,14 @@ def display_results():
         extractor = Rake()
         keywords = extractor.extract_keywords(current_input)
         keywords = keywords[:10]
+        print(keywords)
 
+    elif extractor_algo == 'TextRank':
+        st.markdown("TextRank implementation inspired by the [original paper]("
+                    "https://www.aclweb.org/anthology/W04-3252.pdf)")
+        extractor = TextRank()
+        keywords = extractor.extract_keywords(current_input)
+        print(keywords)
     return keywords
 
 
@@ -62,7 +70,7 @@ st.markdown(' 3. Et voilá!')
 
 current_input = st.text_area(label="Input text:", value=default_doc, height=250)
 st.sidebar.header("Set Parameter Values")
-extractor_algo = st.sidebar.radio(label="Extractor", options=['None', 'RAKE', 'KeyBERT'])
+extractor_algo = st.sidebar.radio(label="Extractor", options=['None', 'KeyBERT', 'RAKE', 'TextRank'])
 
 keywords = display_results()
 df_keywords = pd.DataFrame(keywords, columns=['Keyword', 'Score'])

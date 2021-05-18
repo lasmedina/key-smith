@@ -50,8 +50,8 @@ class TextRank:
         keyphrases = self.__run_pagerank()
 
         sorted_keyphrases = sorted(keyphrases, key=keyphrases.get, reverse=True)
-        top_keyphrases = {}
+        top_keyphrases = []
         for i in range(self.top_candidates):
-            top_keyphrases[sorted_keyphrases[i]] = keyphrases[sorted_keyphrases[i]]
+            top_keyphrases.append((" ".join(sorted_keyphrases[i]), keyphrases[sorted_keyphrases[i]]))
 
         return top_keyphrases
