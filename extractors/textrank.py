@@ -8,15 +8,13 @@ class TextRank:
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")
         self.doc = None
-        self.window_n = 10
-        self.top_candidates = 6
         self.G = nx.Graph()
 
-    def __find_cooccurrences(self, pos_tags):
+    def __find_cooccurrences(self, pos_tags, window_n):
         list_tokens = list(self.doc)
-        for i in range(0, len(list_tokens) - self.window_n):
+        for i in range(0, len(list_tokens) - window_n):
             token_i = list_tokens[i]
-            for j in range(i, i + self.window_n):
+            for j in range(i, i + window_n):
                 token_j = list_tokens[j]
                 if token_i.pos_ in pos_tags and token_j.pos_ in pos_tags:
                     self.G.add_edge(token_i.text, token_j.text)
@@ -46,16 +44,17 @@ class TextRank:
 
         return keyphrases
 
-    def extract_keywords(self, text, pos_tags=None):
+    def extract_keywords(self, text, pos_tags=None, cooccurrence_window_length=3, num_top_candidates=10):
         if pos_tags is None:
             pos_tags = ['ADJ', 'NOUN']
         self.doc = self.nlp(text.lower())
-        self.__find_cooccurrences(pos_tags)
+        self.__find_cooccurrences(pos_tags, cooccurrence_window_length)
         keyphrases = self.__run_pagerank()
 
         sorted_keyphrases = sorted(keyphrases, key=keyphrases.get, reverse=True)
         top_keyphrases = []
-        for i in range(self.top_candidates):
-            top_keyphrases.append((" ".join(sorted_keyphrases[i]), keyphrases[sorted_keyphrases[i]]))
+        for i in range(num_top_candidates):
+            top_keyphrases.append((" ".join(sorted_keyphrases[i]),
+                                   round(keyphrases[sorted_keyphrases[i]], 3)))
 
         return top_keyphrases

@@ -13,13 +13,20 @@ class TextRankTestCase(unittest.TestCase):
                "criteria and the corresponding algorithms for constructing a minimal supporting set of solutions can " \
                "be used in solving all the considered types of systems and systems of mixed types."
 
+        # Paper does not specify parameter values (e.g. window length), thus this is an approximation with chosen
+        # default cooccurrence window length of 3 and top candidates of 10.
         textrank = TextRank()
         actual_keywords = textrank.extract_keywords(text)
-        expected_keywords = [('linear diophantine equations', 0.12909098715935866),
-                             ('minimal generating sets', 0.12328705522540664),
-                             ('minimal set', 0.11282312634758349),
-                             ('linear constraints', 0.08726551819217813),
-                             ('nonstrict inequations', 0.07979547401305309),
-                             ('strict inequations', 0.0793495898728744)]
+        expected_keywords = [('linear diophantine equations', 0.156),
+                             ('minimal generating sets', 0.129),
+                             ('linear constraints', 0.1),
+                             ('minimal set', 0.096),
+                             ('upper bounds', 0.085),
+                             ('strict inequations', 0.082),
+                             ('natural numbers', 0.075),
+                             ('nonstrict inequations', 0.075),
+                             ('systems', 0.066),
+                             ('minimal', 0.053)
+                             ]
 
         self.assertListEqual(actual_keywords, expected_keywords)
