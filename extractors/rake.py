@@ -1,11 +1,15 @@
+"""RAKE class."""
+from typing import List, Tuple, Any
+
 import pandas as pd
 from spacy.lang.en import English
 
 
 class Rake:
-    """."""
+    """Rapid Automatic Keyword Extraction (RAKE) implementation."""
 
     def __init__(self):
+        """Set language model and delimiters."""
         nlp = English()
         delimiters = list(nlp.Defaults.stop_words)
         delimiters.extend([",", ":", ".", "?", "!", "\n"])
@@ -14,7 +18,19 @@ class Rake:
 
         self._nlp = nlp
 
-    def extract_keywords(self, text):
+    def extract_keywords(self, text: str) -> List[Tuple[str, Any]]:
+        """Extract keywords from text with RAKE.
+
+        Parameters
+        ----------
+        text : str
+            Input text.
+
+        Returns
+        -------
+        List[Tuple[str, Any]]
+            List of (keyword, score) tuples, sorted by score.
+        """
         doc = self._nlp(text.lower())
 
         # Build co-occurrence matrix for pairs of tokens and list of candidate keywords
@@ -22,13 +38,18 @@ class Rake:
         unique_tokens = set()
         scored_candidates = {}
         for sent in doc.sents:
-            candidate_tokens = [t.text for t in self._nlp(sent.text) if
-                                not t.is_stop and not t.is_punct and not t.is_space]
+            candidate_tokens = [
+                t.text
+                for t in self._nlp(sent.text)
+                if not t.is_stop and not t.is_punct and not t.is_space
+            ]
             candidates.append(candidate_tokens)
             unique_tokens.update(candidate_tokens)
             scored_candidates[tuple(candidate_tokens)] = 0
 
-        cooccurrences = pd.DataFrame(0, columns=list(unique_tokens), index=list(unique_tokens))
+        cooccurrences = pd.DataFrame(
+            0, columns=list(unique_tokens), index=list(unique_tokens)
+        )
         for candidate in candidates:
             for t1 in candidate:
                 for t2 in candidate:
