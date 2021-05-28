@@ -3,12 +3,17 @@ import spacy
 
 
 class TextRank:
-    """."""
+    """TextRank for automatic keyword extraction."""
 
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")
         self.doc = None
         self.G = nx.Graph()
+        self.ud_pos_tags = {'Adjective': 'ADJ', 'Adposition': 'ADP', 'Adverb': 'ADV', 'Auxiliary': 'AUX',
+                            'Coord. Conjunction': 'CCONJ', 'Determiner': 'DET', 'Interjection': 'INTJ', 'Noun': 'NOUN',
+                            'Numeral': 'NUM', 'Particle': 'PART', 'Pronoun': 'PRON', 'Proper Noun': 'PROPN',
+                            'Punctuation': 'PUNCT', 'Sub. Conjunction': 'SCONJ', 'Symbol': 'SYM', 'Verb': 'VERB',
+                            'Other': 'X'}
 
     def __find_cooccurrences(self, pos_tags, window_n):
         list_tokens = list(self.doc)
@@ -44,16 +49,21 @@ class TextRank:
 
         return keyphrases
 
-    def extract_keywords(self, text, pos_tags=None, cooccurrence_window_length=3, num_top_candidates=10):
-        if pos_tags is None:
-            pos_tags = ['ADJ', 'NOUN']
+    def __map_pos_tags(self, full_pos):
+        return [self.ud_pos_tags[p] for p in full_pos]
+
+    def extract_keywords(self, text, full_pos=None, cooccurrence_window_length=3):
+        if full_pos is None:
+            full_pos = ['Adjective', 'Noun']
+        pos_tags = self.__map_pos_tags(full_pos)
+
         self.doc = self.nlp(text.lower())
         self.__find_cooccurrences(pos_tags, cooccurrence_window_length)
         keyphrases = self.__run_pagerank()
 
         sorted_keyphrases = sorted(keyphrases, key=keyphrases.get, reverse=True)
         top_keyphrases = []
-        for i in range(num_top_candidates):
+        for i in range(len(sorted_keyphrases)):
             top_keyphrases.append((" ".join(sorted_keyphrases[i]),
                                    round(keyphrases[sorted_keyphrases[i]], 3)))
 

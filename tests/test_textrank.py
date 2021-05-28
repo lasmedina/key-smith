@@ -30,3 +30,13 @@ class TextRankTestCase(unittest.TestCase):
                              ]
 
         self.assertListEqual(actual_keywords, expected_keywords)
+
+    def test_pos_tag_mapping(self):
+        full_pos = ['Noun', 'Adjective', 'Verb', 'Other']
+        exp_ud_pos_tags = ['NOUN', 'ADJ', 'VERB', 'X']
+
+        extractor = TextRank()
+        act_us_pos_tags = extractor._TextRank__map_pos_tags(full_pos)
+
+        self.assertListEqual(act_us_pos_tags, exp_ud_pos_tags)
+

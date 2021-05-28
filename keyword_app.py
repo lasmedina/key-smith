@@ -36,14 +36,20 @@ def display_results():
         extractor = Rake()
         keywords = extractor.extract_keywords(current_input)
         keywords = keywords[:10]
-        print(keywords)
 
     elif extractor_algo == 'TextRank':
         st.markdown("TextRank implementation inspired by the [original paper]("
                     "https://www.aclweb.org/anthology/W04-3252.pdf)")
         extractor = TextRank()
-        keywords = extractor.extract_keywords(current_input)
-        print(keywords)
+        window_length = st.sidebar.number_input(label="Window Length", min_value=1, max_value=10, value=1)
+        pos_tags = st.sidebar.multiselect('Part-of-speech Tags', ['Adjective', 'Adposition', 'Adverb', 'Auxiliary',
+                                                                  'Coord. Conjunction', 'Determiner', 'Interjection',
+                                                                  'Noun', 'Numeral', 'Particle', 'Pronoun',
+                                                                  'Proper Noun', 'Punctuation', 'Sub. Conjunction',
+                                                                  'Symbol', 'Verb', 'Other'],
+                                          ['Adjective', 'Noun'])
+        keywords = extractor.extract_keywords(current_input, pos_tags, window_length)
+        keywords = keywords[:10]
     return keywords
 
 
